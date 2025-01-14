@@ -1,5 +1,5 @@
 # cml_comp_server
-Flask service for comparable properties with deduplication and CSV export.
+Flask service for comparable properties using the PRYCD.com Comp API with deduplication and CSV export.
 
 ## Features
 - Dynamic field extraction from API responses.
