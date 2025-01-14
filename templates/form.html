@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Comparable Properties</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .form-container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            font-weight: bold;
+            font-size: 14px;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .submit-button {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .submit-button button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .submit-button button:disabled {
+            background-color: #a6c8ff;
+            cursor: not-allowed;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            font-size: 14px;
+            color: #007bff;
+            margin-top: 10px;
+        }
+    </style>
+    <script>
+        function handleSubmit(event) {
+            const button = document.querySelector("button[type='submit']");
+            const loadingText = document.querySelector(".loading");
+
+            // Disable the button and show the loading message
+            button.disabled = true;
+            button.textContent = "Fetching Data, Please Wait...";
+            loadingText.style.display = "block";
+
+            // Reset the form after submission (optional)
+            setTimeout(() => {
+                button.disabled = false;
+                button.textContent = "Get Comps";
+                loadingText.style.display = "none";
+            }, 5000);
+        }
+    </script>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Get Comparable Properties</h1>
+        <form method="POST" onsubmit="handleSubmit(event)">
+            <div class="form-group">
+                <label for="key">Key</label>
+                <input type="password" id="key" name="key" required>
+            </div>
+            <div class="form-group">
+                <label for="latitude">Latitude</label>
+                <input type="text" id="latitude" name="latitude" required>
+            </div>
+            <div class="form-group">
+                <label for="longitude">Longitude</label>
+                <input type="text" id="longitude" name="longitude" required>
+            </div>
+            <div class="form-group">
+                <label for="min_acreage">Minimum Acreage</label>
+                <input type="number" id="min_acreage" name="min_acreage" step="0.1" required>
+            </div>
+            <div class="form-group">
+                <label for="max_acreage">Maximum Acreage</label>
+                <input type="number" id="max_acreage" name="max_acreage" step="0.1" required>
+            </div>
+            <div class="form-group">
+                <label for="radius">Radius (miles)</label>
+                <input type="number" id="radius" name="radius" step="0.1" required>
+            </div>
+            <div class="form-group">
+                <label for="max_comps">Maximum Comps</label>
+                <input type="number" id="max_comps" name="max_comps" value="20" required>
+            </div>
+            <div class="form-group">
+                <label for="comp_age">Comp Age (days)</label>
+                <input type="number" id="comp_age" name="comp_age" value="180" required>
+            </div>
+            <div class="form-group">
+                <input type="checkbox" id="remove_duplicates" name="remove_duplicates" checked>
+                <label for="remove_duplicates">Remove Duplicates</label>
+            </div>
+            <div class="submit-button">
+                <button type="submit">Get Comps</button>
+            </div>
+            <div class="loading">Fetching data... Please wait.</div>
+        </form>
+    </div>
+</body>
+</html>
