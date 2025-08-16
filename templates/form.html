@@ -20,28 +20,40 @@
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            max-width: 500px;
+            max-width: 600px;
             width: 100%;
         }
-        .form-group {
-            margin-bottom: 15px;
+        .form-group, .form-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
         }
-        .form-group label {
-            font-weight: bold;
-            font-size: 14px;
-            display: block;
-            margin-bottom: 5px;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 10px;
+        .form-group input, .form-row input {
+            width: 45%;
+            padding: 8px;
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 14px;
         }
+        .form-group label, .form-row label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .form-row input {
+            width: 30%;
+        }
+        .form-checkbox {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .form-checkbox label {
+            font-size: 16px;
+        }
         .submit-button {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 15px;
         }
         .submit-button button {
             background-color: #007bff;
@@ -52,17 +64,21 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            width: 100%;
         }
         .submit-button button:disabled {
             background-color: #a6c8ff;
             cursor: not-allowed;
         }
+        .submit-button button:active {
+            background-color: #0056b3;
+        }
         .loading {
             display: none;
             text-align: center;
-            font-size: 14px;
+            font-size: 16px;
             color: #007bff;
-            margin-top: 10px;
+            margin-top: 15px;
         }
     </style>
     <script>
@@ -72,61 +88,88 @@
 
             // Disable the button and show the loading message
             button.disabled = true;
-            button.textContent = "Fetching Data, Please Wait...";
+            button.textContent = "Fetching Data, Please Wait";
             loadingText.style.display = "block";
 
-            // Reset the form after submission (optional)
+            // Reset after form submission
             setTimeout(() => {
                 button.disabled = false;
                 button.textContent = "Get Comps";
                 loadingText.style.display = "none";
-            }, 5000);
+            }, 3000);
         }
     </script>
 </head>
 <body>
     <div class="form-container">
-        <h1>Get Comparable Properties</h1>
+        <h1 style="text-align: center; margin-bottom: 20px;">Get Comparable Properties</h1>
         <form method="POST" onsubmit="handleSubmit(event)">
+            <!-- Key -->
             <div class="form-group">
-                <label for="key">Key</label>
-                <input type="password" id="key" name="key" required>
+                <div style="width: 100%;">
+                    <label for="key">Key</label>
+                    <input type="password" id="key" name="key" placeholder="Enter your key" required>
+                </div>
             </div>
+
+            <!-- Latitude and Longitude -->
             <div class="form-group">
-                <label for="latitude">Latitude</label>
-                <input type="text" id="latitude" name="latitude" required>
+                <div>
+                    <label for="latitude">Latitude</label>
+                    <input type="text" id="latitude" name="latitude" required>
+                </div>
+                <div>
+                    <label for="longitude">Longitude</label>
+                    <input type="text" id="longitude" name="longitude" required>
+                </div>
             </div>
+
+            <!-- Minimum and Maximum Acreage -->
             <div class="form-group">
-                <label for="longitude">Longitude</label>
-                <input type="text" id="longitude" name="longitude" required>
+                <div>
+                    <label for="min_acreage">Minimum Acreage</label>
+                    <input type="number" id="min_acreage" name="min_acreage" step="0.1" required>
+                </div>
+                <div>
+                    <label for="max_acreage">Maximum Acreage</label>
+                    <input type="number" id="max_acreage" name="max_acreage" step="0.1" required>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="min_acreage">Minimum Acreage</label>
-                <input type="number" id="min_acreage" name="min_acreage" step="0.1" required>
+
+            <!-- Radius, Maximum Comps, and Comp Age -->
+            <div class="form-row">
+                <div>
+                    <label for="radius">Radius (miles)</label>
+                    <input type="number" id="radius" name="radius" step="0.1" required>
+                </div>
+                <div>
+                    <label for="max_comps">Maximum Comps</label>
+                    <input type="number" id="max_comps" name="max_comps" value="20" required>
+                </div>
+                <div>
+                    <label for="comp_age">Comp Age (days)</label>
+                    <input type="number" id="comp_age" name="comp_age" value="180" required>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="max_acreage">Maximum Acreage</label>
-                <input type="number" id="max_acreage" name="max_acreage" step="0.1" required>
-            </div>
-            <div class="form-group">
-                <label for="radius">Radius (miles)</label>
-                <input type="number" id="radius" name="radius" step="0.1" required>
-            </div>
-            <div class="form-group">
-                <label for="max_comps">Maximum Comps</label>
-                <input type="number" id="max_comps" name="max_comps" value="20" required>
-            </div>
-            <div class="form-group">
-                <label for="comp_age">Comp Age (days)</label>
-                <input type="number" id="comp_age" name="comp_age" value="180" required>
-            </div>
-            <div class="form-group">
+
+            <!-- Remove Duplicates Checkbox -->
+            <div class="form-checkbox">
                 <input type="checkbox" id="remove_duplicates" name="remove_duplicates" checked>
                 <label for="remove_duplicates">Remove Duplicates</label>
             </div>
+
+            <!-- Debug Mode Checkbox -->
+            <div class="form-checkbox">
+                <input type="checkbox" id="debug_mode" name="debug_mode">
+                <label for="debug_mode">🔍 Show Debug Information (Recommended for troubleshooting)</label>
+            </div>
+
+            <!-- Submit Button -->
             <div class="submit-button">
                 <button type="submit">Get Comps</button>
             </div>
+
+            <!-- Loading Text -->
             <div class="loading">Fetching data... Please wait.</div>
         </form>
     </div>

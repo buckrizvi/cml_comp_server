@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Information - CML Comp Server</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #1a1a1a;
+            color: #00ff00;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #000;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #00ff00;
+        }
+        h1 {
+            color: #00ffff;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px #00ffff;
+        }
+        h2 {
+            color: #ffff00;
+            border-bottom: 2px solid #ffff00;
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+        .section {
+            background: #111;
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #00ff00;
+        }
+        .error {
+            background: #330000;
+            border-left: 4px solid #ff0000;
+            color: #ff6666;
+        }
+        .success {
+            color: #00ff00;
+        }
+        .warning {
+            color: #ffaa00;
+        }
+        .key {
+            color: #00ffff;
+            font-weight: bold;
+        }
+        .value {
+            color: #ffffff;
+            margin-left: 10px;
+        }
+        pre {
+            background: #222;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border: 1px solid #444;
+            white-space: pre-wrap;
+        }
+        .download-section {
+            background: #003300;
+            border: 2px solid #00ff00;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+        .download-button {
+            background: #00aa00;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+        }
+        .download-button:hover {
+            background: #00ff00;
+            color: black;
+        }
+        .back-button {
+            background: #0066cc;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .back-button:hover {
+            background: #0088ff;
+        }
+        .status-icon {
+            font-size: 18px;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Debug Information</h1>
+        
+        <div class="section">
+            <a href="/" class="back-button">← Back to Form</a>
+        </div>
+
+        {% if debug_info.errors %}
+        <div class="section error">
+            <h2>❌ Errors Found</h2>
+            {% for error in debug_info.errors %}
+                <div>{{ error }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="section">
+            <h2>🔐 Environment Variables</h2>
+            <div><span class="key">RAPIDAPI_KEY:</span> <span class="value">{{ debug_info.environment_variables.RAPIDAPI_KEY }}</span></div>
+            <div><span class="key">RAPIDAPI_KEY Length:</span> <span class="value">{{ debug_info.environment_variables.RAPIDAPI_KEY_length }} characters</span></div>
+            <div><span class="key">RAPIDAPI_KEY Preview:</span> <span class="value">{{ debug_info.environment_variables.RAPIDAPI_KEY_preview }}</span></div>
+            <div><span class="key">SECURE_KEY:</span> <span class="value">{{ debug_info.environment_variables.SECURE_KEY }}</span></div>
+            <div><span class="key">SECURE_KEY Length:</span> <span class="value">{{ debug_info.environment_variables.SECURE_KEY_length }} characters</span></div>
+        </div>
+
+        <div class="section">
+            <h2>📝 Form Data Received</h2>
+            {% if debug_info.form_data.entered_key %}
+                <div><span class="key">Entered Key:</span> <span class="value">{{ debug_info.form_data.entered_key }}</span></div>
+                <div><span class="key">Key Match:</span> <span class="value">{{ "✅ Yes" if debug_info.form_data.key_match else "❌ No" }}</span></div>
+            {% endif %}
+            {% if debug_info.form_data.latitude %}
+                <div><span class="key">Latitude:</span> <span class="value">{{ debug_info.form_data.latitude }}</span></div>
+                <div><span class="key">Longitude:</span> <span class="value">{{ debug_info.form_data.longitude }}</span></div>
+                <div><span class="key">Min Acreage:</span> <span class="value">{{ debug_info.form_data.min_acreage }}</span></div>
+                <div><span class="key">Max Acreage:</span> <span class="value">{{ debug_info.form_data.max_acreage }}</span></div>
+                <div><span class="key">Radius:</span> <span class="value">{{ debug_info.form_data.radius }} miles</span></div>
+                <div><span class="key">Max Comps:</span> <span class="value">{{ debug_info.form_data.max_comps }}</span></div>
+                <div><span class="key">Comp Age:</span> <span class="value">{{ debug_info.form_data.comp_age }} days</span></div>
+                <div><span class="key">Remove Duplicates:</span> <span class="value">{{ "✅ Yes" if debug_info.form_data.remove_duplicates else "❌ No" }}</span></div>
+            {% endif %}
+        </div>
+
+        {% if debug_info.payload %}
+        <div class="section">
+            <h2>📤 API Request Payload</h2>
+            <pre>{{ debug_info.payload | tojson(indent=2) }}</pre>
+        </div>
+        {% endif %}
+
+        {% if debug_info.api_request %}
+        <div class="section">
+            <h2>🌐 API Request Details</h2>
+            <div><span class="key">URL:</span> <span class="value">{{ debug_info.api_request.url }}</span></div>
+            <div><span class="key">Method:</span> <span class="value">{{ debug_info.api_request.method }}</span></div>
+            <div><span class="key">Headers:</span></div>
+            <pre>{{ debug_info.api_request.headers | tojson(indent=2) }}</pre>
+        </div>
+        {% endif %}
+
+        {% if debug_info.api_response %}
+        <div class="section">
+            <h2>📥 API Response</h2>
+            <div><span class="key">Status Code:</span> <span class="value">{{ debug_info.api_response.status_code }}</span></div>
+            <div><span class="key">Status:</span> <span class="value">{{ debug_info.api_response.status_text }}</span></div>
+            <div><span class="key">Response Size:</span> <span class="value">{{ debug_info.api_response.response_size }} bytes</span></div>
+            
+            {% if debug_info.api_response.json_parsed %}
+                <div><span class="key">JSON Parsing:</span> <span class="value">{{ debug_info.api_response.json_parsed }}</span></div>
+            {% endif %}
+            
+            {% if debug_info.api_response.response_structure %}
+                <div><span class="key">Response Structure:</span></div>
+                <pre>{{ debug_info.api_response.response_structure | tojson(indent=2) }}</pre>
+            {% endif %}
+            
+            <div><span class="key">Raw Response:</span></div>
+            <pre>{{ debug_info.api_response.response_text }}</pre>
+        </div>
+        {% endif %}
+
+        {% if debug_info.csv_data %}
+        <div class="section">
+            <h2>📊 CSV Data Analysis</h2>
+            <div><span class="key">Data Found:</span> <span class="value">{{ debug_info.csv_data.data_found }}</span></div>
+            <div><span class="key">Data Count:</span> <span class="value">{{ debug_info.csv_data.data_count }} records</span></div>
+            <div><span class="key">Data Type:</span> <span class="value">{{ debug_info.csv_data.data_type }}</span></div>
+            <div><span class="key">CSV Rows Written:</span> <span class="value">{{ debug_info.csv_data.rows_written }}</span></div>
+            
+            {% if debug_info.csv_data.first_item_keys != "No data items" %}
+                <div><span class="key">Available Fields:</span> <span class="value">{{ debug_info.csv_data.first_item_keys }}</span></div>
+            {% endif %}
+            
+            {% if debug_info.csv_data.sample_data != "No sample data available" %}
+                <div><span class="key">Sample Data:</span></div>
+                <pre>{{ debug_info.csv_data.sample_data | tojson(indent=2) }}</pre>
+            {% endif %}
+            
+            {% if debug_info.csv_data.csv_content_preview %}
+                <div><span class="key">CSV Preview:</span></div>
+                <pre>{{ debug_info.csv_data.csv_content_preview }}</pre>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% if debug_info.csv_data and debug_info.csv_data.rows_written > 0 %}
+        <div class="download-section">
+            <h2>✅ CSV Ready for Download</h2>
+            <p>Found {{ debug_info.csv_data.data_count }} records, wrote {{ debug_info.csv_data.rows_written }} rows to CSV.</p>
+            <form method="POST" style="display: inline;">
+                {% if debug_info.form_data %}
+                    <input type="hidden" name="key" value="{{ request.form.get('key') }}">
+                    <input type="hidden" name="latitude" value="{{ debug_info.form_data.latitude }}">
+                    <input type="hidden" name="longitude" value="{{ debug_info.form_data.longitude }}">
+                    <input type="hidden" name="min_acreage" value="{{ debug_info.form_data.min_acreage }}">
+                    <input type="hidden" name="max_acreage" value="{{ debug_info.form_data.max_acreage }}">
+                    <input type="hidden" name="radius" value="{{ debug_info.form_data.radius }}">
+                    <input type="hidden" name="max_comps" value="{{ debug_info.form_data.max_comps }}">
+                    <input type="hidden" name="comp_age" value="{{ debug_info.form_data.comp_age }}">
+                    {% if debug_info.form_data.remove_duplicates %}
+                        <input type="hidden" name="remove_duplicates" value="on">
+                    {% endif %}
+                {% endif %}
+                <input type="hidden" name="download_csv" value="yes">
+                <button type="submit" class="download-button">📥 Download CSV File</button>
+            </form>
+        </div>
+        {% endif %}
+
+        <div class="section">
+            <h2>🔍 Troubleshooting Guide</h2>
+            <div>
+                <h3>If you see empty CSV:</h3>
+                <ul>
+                    <li>Check if API response contains data (look at "Data Found" above)</li>
+                    <li>Verify your search parameters (lat/lng, radius, acreage range)</li>
+                    <li>Try a different location or larger search radius</li>
+                    <li>Check if your RapidAPI subscription is active</li>
+                </ul>
+                
+                <h3>If API call fails:</h3>
+                <ul>
+                    <li>Verify your RAPIDAPI_KEY is set correctly in Vercel environment variables</li>
+                    <li>Check if you have remaining API credits</li>
+                    <li>Ensure your RapidAPI subscription includes the PRYCD Comps API</li>
+                </ul>
+                
+                <h3>If authentication fails:</h3>
+                <ul>
+                    <li>Make sure your SECURE_KEY environment variable matches what you're entering</li>
+                    <li>Check for extra spaces or special characters</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
