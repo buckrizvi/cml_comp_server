@@ -1,14 +1,30 @@
-# CML Comp Server - Vercel Deployment
+# CML Comp Server
 
-A Flask web application for fetching comparable property data via RapidAPI, optimized for deployment on Vercel.
+A powerful Flask web application for fetching comparable property data from the PRYCD Comps API via RapidAPI. Designed for real estate professionals, investors, and researchers who need quick access to property comparable data with geographic and acreage-based filtering.
 
-## Features
+🚀 **Now optimized for serverless deployment on Vercel!**
 
-- Web form interface for property search parameters
-- Integration with RapidAPI for property comparables
-- CSV export functionality
-- Secure key-based access
-- Serverless deployment ready
+## ✨ Features
+
+### Core Functionality
+- 🏡 **Property Comparable Search**: Find similar properties by location, acreage, and other criteria
+- 📍 **Geographic Search**: Search by latitude/longitude with customizable radius
+- 📊 **Rich Data Export**: Export detailed property data to CSV format
+- 🔍 **Advanced Filtering**: Filter by acreage range, property age, and remove duplicates
+- 🔐 **Secure Access**: Password-protected interface for authorized users only
+
+### Data Fields Exported
+- **Location**: Latitude, Longitude, Address, City
+- **Property Details**: Acreage, Price, Price per Acre, Status
+- **Metadata**: Source, Distance from search point
+- **Additional Info**: Available based on API response
+
+### Developer Features
+- 🛠️ **Comprehensive Debugging**: Built-in debug mode shows API requests, responses, and data flow
+- 📋 **Environment Variable Validation**: Checks API keys and configuration
+- 🔄 **Smart Error Handling**: Detailed error messages and troubleshooting guidance
+- ☁️ **Serverless Ready**: Optimized for Vercel's serverless platform
+- 📱 **Responsive Design**: Works on desktop and mobile devices
 
 ## Local Development
 
@@ -34,39 +50,42 @@ A Flask web application for fetching comparable property data via RapidAPI, opti
    python app.py
    ```
 
-## Vercel Deployment
+## 🚀 Vercel Deployment (Recommended)
+
+This application is optimized for Vercel's serverless platform and can be deployed directly from GitHub.
 
 ### Prerequisites
-- Vercel account (hobby plan supported)
-- Vercel CLI installed: `npm install -g vercel`
+- Vercel account (free hobby plan supported)
+- GitHub repository (this one!)
 
-### Deployment Steps
+### Quick Deployment Steps
 
-1. **Login to Vercel:**
+1. **Go to [vercel.com](https://vercel.com)** and sign in with GitHub
+2. **Click "New Project"** and import this repository
+3. **Vercel will auto-detect** the Python configuration
+4. **Set Environment Variables** before deploying:
+   - `RAPIDAPI_KEY`: Your RapidAPI key for PRYCD Comps API
+   - `SECURE_KEY`: Your chosen password for app access
+5. **Click Deploy** - your app will be live in minutes!
+
+### Alternative: CLI Deployment
+
+If you prefer using the command line:
+
+1. **Install Vercel CLI:**
    ```bash
-   vercel login
+   npm install -g @vercel/cli
    ```
 
-2. **Deploy the project:**
-   ```bash
-   vercel
-   ```
-   - Follow the prompts to link/create a new project
-   - Choose "y" when asked to link to existing project or create new
-   - Accept default settings
-
-3. **Set Environment Variables:**
-   After deployment, set your environment variables in the Vercel dashboard:
-   - Go to your project dashboard on vercel.com
-   - Navigate to Settings > Environment Variables
-   - Add:
-     - `RAPIDAPI_KEY`: Your RapidAPI key
-     - `SECURE_KEY`: Your chosen secure access key
-
-4. **Redeploy to apply environment variables:**
+2. **Deploy:**
    ```bash
    vercel --prod
    ```
+
+### Post-Deployment
+- Your app will be available at `https://your-project-name.vercel.app`
+- Any pushes to the main branch will automatically redeploy
+- Monitor logs and performance in the Vercel dashboard
 
 ### Project Structure for Vercel
 
@@ -84,18 +103,33 @@ cml_comp_server/
 └── README.md            # This file
 ```
 
-## Usage
+## 📋 How to Use
 
-1. Navigate to your deployed Vercel URL
-2. Enter your secure key
-3. Fill in property search parameters:
-   - Latitude/Longitude coordinates
-   - Minimum/Maximum acreage
-   - Search radius in miles
-   - Maximum number of comparables
-   - Comp age in days
-   - Option to remove duplicates
-4. Click "Get Comps" to download CSV results
+### Basic Usage
+1. **Access the App**: Navigate to your deployed Vercel URL
+2. **Authenticate**: Enter your secure key (set in environment variables)
+3. **Set Search Parameters**:
+   - **Latitude/Longitude**: Target location coordinates
+   - **Acreage Range**: Minimum and maximum property size
+   - **Search Radius**: How far to search (in miles, decimals allowed)
+   - **Max Comparables**: Maximum number of results (up to API limits)
+   - **Property Age**: How recent the comparables should be (in days)
+   - **Remove Duplicates**: Filter out similar properties
+4. **Get Results**: Click "Get Comps" to download CSV file
+
+### Debug Mode
+- **Check the "Show Debug Information" box** to see detailed information about:
+  - Environment variable status
+  - API request/response details
+  - Data processing steps
+  - Error diagnostics
+- **Perfect for troubleshooting** empty results or API issues
+
+### CSV Output
+The exported CSV includes:
+- Property location (lat/lng, address, city)
+- Property details (acreage, price, price per acre, status)
+- Search metadata (distance from search point, data source)
 
 ## Environment Variables
 
@@ -109,23 +143,59 @@ This application integrates with the RapidAPI property comparables service:
 - Returns property data in JSON format
 - Exports results as CSV file
 
-## Troubleshooting
+## 🛠️ Troubleshooting
+
+### Using Debug Mode
+The built-in debug mode is your best friend for troubleshooting:
+1. Check the **"Show Debug Information"** box on the form
+2. Submit your search to see detailed diagnostic information
+3. Review each section to identify issues
 
 ### Common Issues
 
-1. **"Invalid key" error**: Check that your `SECURE_KEY` environment variable matches what you're entering
-2. **API call failed**: Verify your `RAPIDAPI_KEY` is valid and you have credits remaining
-3. **Template not found**: Ensure the templates directory structure is correct
+#### Empty CSV Files
+- **Check debug mode**: Look at "CSV Data Analysis" section
+- **Verify location**: Ensure lat/lng coordinates are valid
+- **Expand search**: Try larger radius or different acreage range
+- **API limits**: Check if you've exceeded RapidAPI quotas
 
-### Vercel-Specific Issues
+#### Authentication Problems
+- **"Invalid key" error**: Verify `SECURE_KEY` in Vercel environment variables
+- **Case sensitivity**: Environment variables are case-sensitive
+- **Special characters**: Avoid spaces or special characters in keys
 
-1. **Function timeout**: Vercel hobby plan has 10-second function timeout
-2. **Cold starts**: First request may be slower due to serverless cold start
-3. **Logs**: Check function logs in Vercel dashboard for debugging
+#### API Integration Issues
+- **API call failed**: Check `RAPIDAPI_KEY` in environment variables
+- **403/401 errors**: Verify your RapidAPI subscription is active
+- **Rate limits**: Check if you've exceeded API call limits
+- **Network issues**: Try again after a few minutes
 
-## Support
+### Vercel-Specific Troubleshooting
 
-For issues with:
-- Vercel deployment: Check Vercel documentation
-- RapidAPI integration: Verify your API key and endpoint access
-- Application bugs: Check the logs and error messages
+#### Deployment Issues
+- **Build failures**: Check Vercel function logs
+- **Environment variables**: Ensure they're set in Vercel dashboard
+- **Cold starts**: First request may take 10-15 seconds
+
+#### Performance
+- **Function timeout**: Hobby plan has 10-second limit
+- **Large datasets**: Consider reducing `max_comps` parameter
+- **Memory limits**: Vercel hobby plan has memory restrictions
+
+## 📞 Getting Help
+
+### Self-Service Options
+1. **Use Debug Mode**: Most issues can be diagnosed with the built-in debugging
+2. **Check Logs**: Review Vercel function logs for detailed error messages
+3. **Verify Setup**: Ensure all environment variables are correctly set
+
+### External Resources
+- **RapidAPI Support**: For API key or quota issues
+- **Vercel Documentation**: For deployment and hosting questions
+- **GitHub Issues**: Report bugs or request features in this repository
+
+## 🔗 Related Services
+
+- **RapidAPI PRYCD Comps**: [API Documentation](https://rapidapi.com/prycd/api/prycd-comps)
+- **Vercel Platform**: [Deployment Guide](https://vercel.com/docs)
+- **Flask Framework**: [Official Documentation](https://flask.palletsprojects.com/)
