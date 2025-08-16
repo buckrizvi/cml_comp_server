@@ -34,7 +34,7 @@ def index():
             min_acreage = float(request.form.get("min_acreage"))
             max_acreage = float(request.form.get("max_acreage"))
             radius = float(request.form.get("radius"))
-            max_comps = int(request.form.get("max_comps"))
+            max_comps = int(float(request.form.get("max_comps")))
             comp_age = request.form.get("comp_age")
             remove_duplicates = request.form.get("remove_duplicates") == "on"
 
@@ -43,7 +43,7 @@ def index():
             if remove_duplicates:
                 comp_options["remove_duplicates"] = True
             if comp_age:
-                comp_options["comp_age"] = int(comp_age)
+                comp_options["comp_age"] = int(float(comp_age))
 
             payload = {
                 "user_id": "ABCDEF123456",
