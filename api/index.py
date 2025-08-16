@@ -141,15 +141,24 @@ def index():
                     # Generate CSV
                     csv_output = io.StringIO()
                     writer = csv.writer(csv_output)
-                    writer.writerow(["Latitude", "Longitude", "Acreage", "Price", "Source"])
+                    writer.writerow(["Latitude", "Longitude", "Acreage", "Price", "Price_Per_Acre", "Source", "Address", "City", "Status", "Distance"])
                     csv_rows_written = 0
-                    for comp in data:
+                    for item in data:
+                        # Extract comp data - handle nested structure
+                        comp_data = item.get("comp", {}) if isinstance(item.get("comp"), dict) else item
+                        distance = item.get("distance", "N/A")
+                        
                         writer.writerow([
-                            comp.get("latitude"),
-                            comp.get("longitude"),
-                            comp.get("acreage"),
-                            comp.get("price"),
-                            comp.get("source")
+                            comp_data.get("latitude", ""),
+                            comp_data.get("longitude", ""),
+                            comp_data.get("acreage", ""),
+                            comp_data.get("price", ""),
+                            comp_data.get("price_per_acre", ""),
+                            comp_data.get("source", ""),
+                            comp_data.get("address", ""),
+                            comp_data.get("city", ""),
+                            comp_data.get("status", ""),
+                            distance
                         ])
                         csv_rows_written += 1
                     
