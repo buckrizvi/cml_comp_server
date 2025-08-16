@@ -3,12 +3,10 @@ import requests
 import csv
 import io
 import os
-from dotenv import load_dotenv
 from rapidfuzz import fuzz
 import logging
 
-# Load environment variables
-load_dotenv()
+# Load environment variables from Vercel environment
 RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY")
 SECURE_KEY = os.getenv("SECURE_KEY")
 
