@@ -97,13 +97,6 @@ def index():
 
     return render_template("form.html")
 
-# Vercel serverless function handler
-def handler(request):
-    return app(request.environ, lambda status, headers: None)
-
-# For compatibility with Vercel
-app_handler = handler
-
 # For local development
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5000)
