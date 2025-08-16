@@ -33,7 +33,7 @@ def index():
             longitude = request.form.get("longitude")
             min_acreage = float(request.form.get("min_acreage"))
             max_acreage = float(request.form.get("max_acreage"))
-            radius = int(request.form.get("radius"))
+            radius = float(request.form.get("radius"))
             max_comps = int(request.form.get("max_comps"))
             comp_age = request.form.get("comp_age")
             remove_duplicates = request.form.get("remove_duplicates") == "on"
